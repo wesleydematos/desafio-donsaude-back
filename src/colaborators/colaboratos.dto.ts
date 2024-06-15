@@ -1,3 +1,4 @@
+import { PartialType } from '@nestjs/mapped-types';
 import {
   IsEmail,
   IsOptional,
@@ -39,3 +40,5 @@ export class ColaboratorDto {
   @IsOptional()
   photo?: string;
 }
+
+export class UpdateColaboratorDto extends PartialType(ColaboratorDto) {}

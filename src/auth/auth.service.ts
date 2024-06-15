@@ -19,17 +19,18 @@ export class AuthService {
     );
   }
 
-  signIn(authDto: AuthDto): AuthResponseDto {
-    console.log(authDto);
-    const foundUser = { password: 'a', id: '', email: '' };
+  async signIn(authDto: AuthDto): Promise<AuthResponseDto> {
+    const foundUser = await this.colaboratorsService.findByEmail(authDto.email);
 
     if (!foundUser || !compareSync(authDto.password, foundUser.password)) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     const payload = { sub: foundUser.id, email: foundUser.email };
 
-    const token = this.jwtService.sign(payload);
+    const token = this.jwtService.sign(payload, {
+      expiresIn: this.jwtExpirationTimeInSeconds,
+    });
 
     return { token, expiresIn: this.jwtExpirationTimeInSeconds };
   }
