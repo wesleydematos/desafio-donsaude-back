@@ -5,7 +5,7 @@ import { hashSync } from 'bcrypt';
 
 const createRandomColaborator = (i: number): Partial<Colaborator> => {
   return {
-    isAllowed: faker.datatype.boolean(),
+    isAllowed: i === 0 ? true : faker.datatype.boolean(),
     name: i === 0 ? 'admin' : faker.person.fullName(),
     documentNumber: '11111111111',
     phone: '11999999999',
