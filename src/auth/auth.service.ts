@@ -21,8 +21,9 @@ export class AuthService {
 
   async signIn(authDto: AuthDto): Promise<AuthResponseDto> {
     const foundUser = await this.colaboratorsService.findByEmail(authDto.email);
+    const { password, ...colaboratorWithOutPassword } = foundUser;
 
-    if (!foundUser || !compareSync(authDto.password, foundUser.password)) {
+    if (!foundUser || !compareSync(authDto.password, password)) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
@@ -32,6 +33,10 @@ export class AuthService {
       expiresIn: this.jwtExpirationTimeInSeconds,
     });
 
-    return { token, expiresIn: this.jwtExpirationTimeInSeconds };
+    return {
+      token,
+      expiresIn: this.jwtExpirationTimeInSeconds,
+      colaborator: colaboratorWithOutPassword,
+    };
   }
 }
