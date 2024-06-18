@@ -8,7 +8,7 @@ import {
   Delete,
   Query,
   UseGuards,
-  NotFoundException,
+  HttpCode,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -28,16 +28,18 @@ import { AuthGuard } from 'src/auth/auth.guard';
 export class ColaboratorsController {
   constructor(private readonly colaboratorsService: ColaboratorsService) {}
 
-  @ApiOperation({ summary: 'Create a new colaborator' })
-  @ApiResponse({ status: 201, description: 'Colaborator created' })
+  @ApiOperation({ summary: 'Cria um novo colaborador' })
+  @ApiResponse({ status: 201, description: 'Colaborador criado' })
   @ApiBody({ type: ColaboratorDto })
   @Post()
   async create(@Body() colaborator: ColaboratorDto) {
     return await this.colaboratorsService.create(colaborator);
   }
 
-  @ApiOperation({ summary: 'Get all colaborators' })
-  @ApiResponse({ status: 200, description: 'List of colaborators' })
+  @ApiOperation({
+    summary: 'Busca todos colaboradores, aceitando parametros de busca.',
+  })
+  @ApiResponse({ status: 200, description: 'Colaboradores listados' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'search', required: false, type: String })
@@ -57,21 +59,17 @@ export class ColaboratorsController {
     });
   }
 
-  @ApiOperation({ summary: 'Get colaborator by ID' })
-  @ApiResponse({ status: 200, description: 'Colaborator found' })
-  @ApiResponse({ status: 404, description: 'Colaborator not found' })
+  @ApiOperation({ summary: 'Busca colaborador por ID' })
+  @ApiResponse({ status: 200, description: 'Colaborador encontrado' })
+  @ApiResponse({ status: 404, description: 'Colaborador não encontrado' })
   @ApiParam({ name: 'id', required: true })
   @Get(':id')
   async getById(@Param('id') id: string) {
-    const colaborator = await this.colaboratorsService.findById(id);
-    if (!colaborator) {
-      throw new NotFoundException(`Colaborator with id ${id} not found`);
-    }
-    return colaborator;
+    return await this.colaboratorsService.findById(id);
   }
 
-  @ApiOperation({ summary: 'Update colaborator' })
-  @ApiResponse({ status: 200, description: 'Colaborator updated' })
+  @ApiOperation({ summary: 'Atualiza colaborador' })
+  @ApiResponse({ status: 200, description: 'Colaborador atualizado' })
   @ApiParam({ name: 'id', required: true })
   @ApiBody({ type: UpdateColaboratorDto })
   @Put(':id')
@@ -82,12 +80,12 @@ export class ColaboratorsController {
     return await this.colaboratorsService.update(id, colaborator);
   }
 
-  @ApiOperation({ summary: 'Delete colaborator' })
-  @ApiResponse({ status: 200, description: 'Colaborator deleted' })
+  @ApiOperation({ summary: 'Deleta colaborador' })
+  @ApiResponse({ status: 204, description: 'Colaborador deletado' })
   @ApiParam({ name: 'id', required: true })
+  @HttpCode(204)
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    await this.colaboratorsService.delete(id);
-    return { message: 'Colaborator deleted successfully' };
+    return await this.colaboratorsService.delete(id);
   }
 }

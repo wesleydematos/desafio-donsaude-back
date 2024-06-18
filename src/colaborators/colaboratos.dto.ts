@@ -10,41 +10,41 @@ import {
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class ColaboratorDto {
-  @ApiPropertyOptional({ description: 'UUID of the colaborator' })
+  @ApiPropertyOptional({ description: 'UUID do colaborator' })
   @IsUUID()
   @IsOptional()
   id?: string;
 
-  @ApiProperty({ description: 'Name of the colaborator' })
+  @ApiProperty({ description: 'Nome do colaborador' })
   @IsString()
   @MinLength(3)
   @MaxLength(256)
   name: string;
 
-  @ApiProperty({ description: 'Document number of the colaborator' })
+  @ApiProperty({ description: 'CPF do colaborador' })
   @IsString()
   @MinLength(11)
   @MaxLength(14)
   documentNumber: string;
 
-  @ApiProperty({ description: 'Phone number of the colaborator' })
+  @ApiProperty({ description: 'Número do telefone do colaborador' })
   @IsString()
   @MinLength(11)
   @MaxLength(20)
   phone: string;
 
-  @ApiProperty({ description: 'Email of the colaborator' })
+  @ApiProperty({ description: 'Email do colaborador' })
   @IsEmail()
   @MinLength(7)
   @MaxLength(100)
   email: string;
 
-  @ApiProperty({ description: 'Password of the colaborator' })
+  @ApiProperty({ description: 'Senha do colaborador' })
   @IsString()
   @MinLength(5)
   password: string;
 
-  @ApiPropertyOptional({ description: 'Photo URL of the colaborator' })
+  @ApiPropertyOptional({ description: 'Foto do colaborador' })
   @IsOptional()
   photo?: string;
 }

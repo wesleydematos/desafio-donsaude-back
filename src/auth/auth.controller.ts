@@ -8,10 +8,10 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiOperation({ summary: 'Login to the application' })
+  @ApiOperation({ summary: 'Loga na aplicação' })
   @ApiResponse({
     status: 200,
-    description: 'Login successful',
+    description: 'Login efetuado',
     type: AuthResponseDto,
   })
   @ApiBody({ type: AuthDto })
