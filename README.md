@@ -1,73 +1,338 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# API Corelab - CoreNotes
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Tabela de Conteúdos
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- [Início Rápido](#1-início-rápido)
+  - [Instalando Dependências](#11-instalando-dependências)
+  - [Scripts](#22-scripts)
+- [Endpoints](#2-endpoints)
+- [Desenvolvedores](#3-desenvolvedores)
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 1. Início Rápido
 
-## Installation
+[ Voltar para o topo ](#tabela-de-conteúdos)
 
-```bash
-$ npm install
+### 1.1. Instalando Dependências
+
+Clone o projeto em sua máquina e instale as dependências com o comando:
+
+```shell
+npm install
 ```
 
-## Running the app
+Após instaladas as dependências adicione o arquivo .env na raiz do projeto e o preencha com as variáveis de ambiete presentes no arquivo .env.example.
 
-```bash
-# development
-$ npm run start
+JWT_SECRET - representa uma chave secreta para garantir seguridade da API.
+JWT_EXPIRATION_TIME - representa o tempo, em segundos (números), que será utilizado para a expiração do token utilizado para garantir que o usuário está logado.
 
-# watch mode
-$ npm run start:dev
+### 1.2. Scripts
 
-# production mode
-$ npm run start:prod
+Executar as migrações no banco de dados:
+
+```
+npm run migration:run
 ```
 
-## Test
+Popular o banco de dados para ter um usuário para login:
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```
+npm run populate:db
 ```
 
-## Support
+Executar aplicação em ambiente de desenvolvimento:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+npm run dev
+```
 
-## Stay in touch
+Após a ececução dos scripts a aplicação estará funcional e com 10 usuários aleatórios no banco de dados, utilize o usuário "admin" para fazer login e acessar as rotas protegidas.
+Dados de login:
+email= admin@mail.com
+senha= admin
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
 
-## License
+## 2. Endpoints
 
-Nest is [MIT licensed](LICENSE).
+DOCUMENTAÇÃO ALTERNATIVA COM SWAGGER: http://localhost:3000/api-docs
+
+[ Voltar para o topo ](#tabela-de-conteúdos)
+
+### Índice
+
+- [Auth](#1-Auth)
+- [Colaborators](#1-Colaborators)
+
+---
+
+## 1. **Auth**
+
+[ Voltar para o topo ](#tabela-de-conteúdos)
+
+### Endpoints
+
+| Método | Rota        | Descrição                               |
+| ------ | ----------- | --------------------------------------- |
+| POST   | /auth/login | Autorização de login de um colaborador. |
+
+---
+
+### 1.1. **Autenticação de Colaborador**
+
+### `POST/auth/login`
+
+### Exemplo de Request:
+
+```
+POST /auth/login
+Host: http://localhost:3000
+Authorization: None
+Content-type: application/json
+```
+
+### Exemplo de Corpo da Requisição:
+
+```json
+{
+  "email": "admin@mail.com",
+  "password": "admin"
+}
+```
+
+### Exemplo de Response:
+
+```
+200 OK
+```
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1OGI1MjhlMS0wN2FiLTQ4MDMtOWE0MS04YWRjZWQzYmZiYjQiLCJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwiaWF0IjoxNzE4NzQ3MzIxLCJleHAiOjE3MTg3NTA5MjF9.5xBVMg4zxvOXXbSzKcNIl_RPsCmT0NkRAVWYmIPh9ow",
+  "expiresIn": 3600,
+  "colaborator": {
+    "id": "58b528e1-07ab-4803-9a41-8adced3bfbb4",
+    "isAllowed": true,
+    "name": "admin",
+    "documentNumber": "11111111111",
+    "phone": "11999999999",
+    "email": "admin@mail.com",
+    "photo": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/821.jpg"
+  }
+}
+```
+
+---
+
+## 2. **Colaborators**
+
+[ Voltar para o topo ](#tabela-de-conteúdos)
+
+### Endpoints
+
+| Método     | Rota              | Descrição                     |
+| ---------- | ----------------- | ----------------------------- |
+| POST       | /colaborators     | Criação de um colaborador.    |
+| GET        | /colaborators     | Busca de todos colaboradores. |
+| GET/:id    | /colaborators/:id | Busca um colaborador por id.  |
+| PUT/:id    | /colaborators/:id | Edita um colaborador por id.  |
+| DELETE/:id | /colaborators/:id | Deleta um colaborador por id. |
+
+---
+
+### 2.1. **Criação de Colaborador**
+
+### `POST/colaborators`
+
+### Exemplo de Request:
+
+```
+POST /colaborators
+Host: http://localhost:3000
+Authorization: Bearer Token
+Content-type: application/json
+```
+
+### Exemplo de Corpo da Requisição:
+
+```json
+{
+  "name": "admin",
+  "documentNumber": "13313313311",
+  "phone": "81987654321",
+  "email": "admin@mail.com",
+  "password": "admin"
+}
+```
+
+### Exemplo de Response:
+
+```
+201 Created
+```
+
+```json
+{
+  "name": "admin",
+  "documentNumber": "13313313311",
+  "phone": "81987654321",
+  "email": "admin@mail.com",
+  "photo": null,
+  "id": "b4f52939-40c6-4be7-b8ee-3a8e1d7c0fb2",
+  "isAllowed": false
+}
+```
+
+---
+
+### 2.2. **Busca de todos os colaboradores**
+
+### `GET/colaborators`
+
+### Exemplo de Request:
+
+```
+GET /colaborators
+Host: http://localhost:3000
+Authorization: Bearer Token
+Content-type: None
+```
+
+### Exemplo de Response:
+
+```
+200 OK
+```
+
+```json
+{
+  "data": [
+    {
+      "id": "58b528e1-07ab-4803-9a41-8adced3bfbb4",
+      "isAllowed": true,
+      "name": "admin",
+      "documentNumber": "11111111111",
+      "phone": "11999999999",
+      "email": "admin@mail.com",
+      "photo": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/821.jpg"
+    },
+    {
+      "id": "a63d3e0d-db03-41bd-b301-5835122fc1ab",
+      "isAllowed": false,
+      "name": "Fernando Roob",
+      "documentNumber": "11111111111",
+      "phone": "11999999999",
+      "email": "Darius_Kilback@gmail.com",
+      "photo": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/43.jpg"
+    }
+  ],
+  "count": 10,
+  "page": 1
+}
+```
+
+A rota aceita os parâmetros "limit" (número referente a quantidade de registros a serem retornados) e "page" (página selecionada de itens a serem retornados) para paginação e "search" (busca por registros que possuam os dados buscados pelo colaborador) e "isAllowed" (filtra por campo isAllowed que é um boolean referente a permissões dos colaboradores) para busca.
+
+---
+
+### 2.3. **Busca colaborador por id**
+
+### `GET/colaborators/:id`
+
+### Exemplo de Request:
+
+```
+GET /colaborators/:id
+Host: http://localhost:3000
+Authorization: Bearer Token
+Content-type: None
+```
+
+### Exemplo de Response:
+
+```
+200 OK
+```
+
+```json
+{
+  "id": "58b528e1-07ab-4803-9a41-8adced3bfbb4",
+  "isAllowed": true,
+  "name": "admin",
+  "documentNumber": "11111111111",
+  "phone": "11999999999",
+  "email": "admin@mail.com",
+  "photo": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/821.jpg"
+}
+```
+
+---
+
+### 2.4. **Edição de nota por id**
+
+### `PUT/colaborators/:id`
+
+### Exemplo de Request:
+
+```
+PUT /colaborators/:id
+Host: http://localhost:3000
+Authorization: Bearer Token
+Content-type: application/json
+```
+
+### Exemplo de Corpo da Requisição:
+
+```json
+{
+  "name": "admin edited"
+}
+```
+
+### Exemplo de Response:
+
+```
+200 OK
+```
+
+```json
+{
+  "id": "6b2e1f35-9d35-4ef3-bea3-b287a759e4d5",
+  "isAllowed": true,
+  "name": "admin edited",
+  "documentNumber": "11111111111",
+  "phone": "11999999999",
+  "email": "admin@mail.com",
+  "photo": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/469.jpg"
+}
+```
+
+---
+
+### 2.5. **Deleção de nota por id**
+
+### `DELETE/colaborators/:id`
+
+### Exemplo de Request:
+
+```
+DELETE /colaborators/:id
+Host: http://localhost:3000
+Authorization: Bearer Token
+Content-type: None
+```
+
+### Exemplo de Response:
+
+```
+204 NO CONTENT
+```
+
+---
+
+## 3. Desenvolvedores
+
+[ Voltar para o topo ](#tabela-de-conteúdos)
+
+[<img src="https://avatars.githubusercontent.com/u/104766684?v=4" width=115><br><sub>Wesley Matos</sub>](https://github.com/wesleydematos)
