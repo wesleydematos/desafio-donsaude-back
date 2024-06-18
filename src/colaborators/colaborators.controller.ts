@@ -41,16 +41,19 @@ export class ColaboratorsController {
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'search', required: false, type: String })
+  @ApiQuery({ name: 'isAllowed', required: false, type: Boolean })
   @Get()
   async getAll(
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query('search') search?: string,
+    @Query('isAllowed') isAllowed?: boolean,
   ) {
     return await this.colaboratorsService.findAll({
       page,
       limit,
       search,
+      isAllowed,
     });
   }
 

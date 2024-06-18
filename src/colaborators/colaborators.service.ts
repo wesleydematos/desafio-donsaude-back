@@ -35,22 +35,22 @@ export class ColaboratorsService {
     page: number;
     limit: number;
     search?: string;
+    isAllowed?: boolean;
   }): Promise<{ data: Colaborator[]; count: number }> {
-    const { page, limit, search } = options;
+    const { page, limit, search, isAllowed } = options;
 
-    const where = [
-      ...(search
-        ? [
-            { name: Like(`%${search}%`) },
-            { email: Like(`%${search}%`) },
-            { documentNumber: Like(`%${search}%`) },
-            { phone: Like(`%${search}%`) },
-          ]
-        : []),
-    ];
+    const where: any = {};
+
+    if (search) {
+      where.name = Like(`%${search}%`);
+    }
+
+    if (isAllowed !== undefined) {
+      where.isAllowed = isAllowed;
+    }
 
     const [data, count] = await this.colaboratorRepository.findAndCount({
-      where: where.length > 0 ? where : undefined,
+      where,
       take: limit,
       skip: (page - 1) * limit,
     });
