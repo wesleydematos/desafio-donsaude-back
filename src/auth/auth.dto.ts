@@ -1,14 +1,21 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { ColaboratorDto } from 'src/colaborators/colaboratos.dto';
 
 export class AuthDto {
+  @ApiProperty({ description: 'Email of the user' })
   email: string;
+
+  @ApiProperty({ description: 'Password of the user' })
   password: string;
 }
 
-export type ColaboratorDtoWithoutPassword = Omit<ColaboratorDto, 'password'>;
-
 export class AuthResponseDto {
+  @ApiProperty({ description: 'JWT token' })
   token: string;
+
+  @ApiProperty({ description: 'Token expiration time in seconds' })
   expiresIn: number;
-  colaborator: ColaboratorDtoWithoutPassword;
+
+  @ApiProperty({ description: 'Colaborator data without password' })
+  colaborator: Omit<ColaboratorDto, 'password'>;
 }
