@@ -36,7 +36,7 @@ export class ColaboratorsService {
     limit: number;
     search?: string;
     isAllowed?: boolean;
-  }): Promise<{ data: Colaborator[]; count: number }> {
+  }): Promise<{ data: Colaborator[]; count: number; page: number }> {
     const { page, limit, search, isAllowed } = options;
 
     const where: any = {};
@@ -46,16 +46,16 @@ export class ColaboratorsService {
     }
 
     if (isAllowed !== undefined) {
-      where.isAllowed = isAllowed;
+      where.isAllowed = this.toBoolean(isAllowed);
     }
 
     const [data, count] = await this.colaboratorRepository.findAndCount({
       where,
-      take: limit,
-      skip: (page - 1) * limit,
+      take: Number(limit),
+      skip: (Number(page) - 1) * Number(limit),
     });
 
-    return { data, count };
+    return { data, count, page };
   }
 
   async findById(id: string): Promise<Colaborator> {
@@ -97,5 +97,9 @@ export class ColaboratorsService {
       throw new NotFoundException(`Colaborador não encontrado.`);
     }
     await this.colaboratorRepository.remove(colaborator);
+  }
+
+  toBoolean(str) {
+    return str.toLowerCase() === 'true';
   }
 }
