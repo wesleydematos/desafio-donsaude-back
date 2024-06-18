@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import { hashSync } from 'bcrypt';
@@ -14,6 +18,14 @@ export class ColaboratorsService {
 
   async create(newColaborator: ColaboratorDto): Promise<Colaborator> {
     newColaborator.password = hashSync(newColaborator.password, 10);
+
+    const colaboratorExists = await this.colaboratorRepository.findOneBy({
+      email: newColaborator.email,
+    });
+
+    if (colaboratorExists) {
+      throw new ConflictException('Colaborador com este email já cadastrado!');
+    }
 
     const colaborator = this.colaboratorRepository.create(newColaborator);
     return await this.colaboratorRepository.save(colaborator);
@@ -49,7 +61,7 @@ export class ColaboratorsService {
   async findById(id: string): Promise<Colaborator> {
     const colaborator = await this.colaboratorRepository.findOneBy({ id });
     if (!colaborator) {
-      throw new NotFoundException(`Colaborator with id ${id} not found`);
+      throw new NotFoundException(`Colaborador não encontrado.`);
     }
     return colaborator;
   }
@@ -57,7 +69,7 @@ export class ColaboratorsService {
   async findByEmail(email: string): Promise<Colaborator> {
     const colaborator = await this.colaboratorRepository.findOneBy({ email });
     if (!colaborator) {
-      throw new NotFoundException(`Colaborator with email ${email} not found`);
+      throw new NotFoundException(`Colaborador não encontrado.`);
     }
     return colaborator;
   }
@@ -68,7 +80,7 @@ export class ColaboratorsService {
   ): Promise<Colaborator> {
     const colaborator = await this.findById(id);
     if (!colaborator) {
-      throw new NotFoundException(`Colaborator with id ${id} not found`);
+      throw new NotFoundException(`Colaborador não encontrado.`);
     }
 
     if (updatedColaborator.password) {
@@ -82,7 +94,7 @@ export class ColaboratorsService {
   async delete(id: string): Promise<void> {
     const colaborator = await this.findById(id);
     if (!colaborator) {
-      throw new NotFoundException(`Colaborator with id ${id} not found`);
+      throw new NotFoundException(`Colaborador não encontrado.`);
     }
     await this.colaboratorRepository.remove(colaborator);
   }
